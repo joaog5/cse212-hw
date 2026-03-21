@@ -12,6 +12,10 @@ public class TakingTurnsQueueTests
     // run until the queue is empty
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
     // Defect(s) Found: 
+    // - Turns were not decremented correctly after each dequeue.
+    // - People with remaining turns were not always re-enqueued properly.
+    // - Players with one remaining turn were not handled correctly (last turn issue).
+    // - Queue did not terminate at the correct time.
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
         var bob = new Person("Bob", 2);
@@ -44,6 +48,9 @@ public class TakingTurnsQueueTests
     // After running 5 times, add George with 3 turns.  Run until the queue is empty.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
     // Defect(s) Found: 
+    // - New players added during execution were not placed correctly at the back of the queue.
+    // - FIFO order was not preserved after adding a new player.
+    // - Turn logic caused incorrect ordering after insertion.
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
         var bob = new Person("Bob", 2);
@@ -86,6 +93,9 @@ public class TakingTurnsQueueTests
     // Run 10 times.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
     // Defect(s) Found: 
+    // - A turns value of 0 was not treated as infinite.
+    // - Infinite-turn players were incorrectly removed or not re-enqueued.
+    // - Turns value was incorrectly modified for infinite players.
     public void TestTakingTurnsQueue_ForeverZero()
     {
         var timTurns = 0;
@@ -117,6 +127,9 @@ public class TakingTurnsQueueTests
     // Run 10 times.
     // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
     // Defect(s) Found: 
+    // - Negative turn values were not treated as infinite.
+    // - Infinite players were incorrectly removed from the queue.
+    // - Turns value was incorrectly modified for infinite players.
     public void TestTakingTurnsQueue_ForeverNegative()
     {
         var timTurns = -3;
@@ -144,6 +157,9 @@ public class TakingTurnsQueueTests
     // Scenario: Try to get the next person from an empty queue
     // Expected Result: Exception should be thrown with appropriate error message.
     // Defect(s) Found: 
+    // - No exception was thrown when the queue was empty, OR
+    // - The wrong exception type or message was used.
+    // - Expected: InvalidOperationException with message "No one in the queue."
     public void TestTakingTurnsQueue_Empty()
     {
         var players = new TakingTurnsQueue();

@@ -45,19 +45,10 @@ public class TakingTurnsQueue
             // Remove the next person from the front of the queue
             Person person = _people.Dequeue();
 
-            // ORIGINAL BUG:
-            // The previous implementation only handled (Turns > 1),
-            // which caused incorrect behavior for:
-            // - Turns == 1 (last turn not handled properly)
-            // - Turns <= 0 (infinite turns not handled at all)
-
-            // FIXED LOGIC:
-
             // Case 1: Infinite turns (0 or negative)
             if (person.Turns <= 0)
             {
                 // Do NOT modify the turns value
-                // Re-enqueue the person so they stay forever
                 _people.Enqueue(person);
             }
             else
@@ -70,7 +61,6 @@ public class TakingTurnsQueue
                 {
                     _people.Enqueue(person);
                 }
-                // If turns == 0 → do NOT re-enqueue (person leaves the queue)
             }
 
             return person;
